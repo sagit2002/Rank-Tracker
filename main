@@ -1,0 +1,40 @@
+import tkinter as tk
+from tkinter import ttk
+from ecommercetools import seo
+
+class GoogleRankTracker(tk.Tk):
+
+  def __init__(self):
+    super().__init__()
+    self.title("Google Rank Tracker")
+    self.website = tk.StringVar()
+    self.keywords = tk.StringVar()
+    self.dataframe = None
+
+    self.create_widgets()
+
+  def create_widgets(self):
+    self.website_label = ttk.Label(self, text="Website:")
+    self.website_entry = ttk.Entry(self, textvariable=self.website)
+    self.keywords_label = ttk.Label(self, text="Keywords:")
+    self.keywords_entry = ttk.Entry(self, textvariable=self.keywords)
+    self.track_button = ttk.Button(self, text="Track Ranks", command=self.track_ranks)
+    self.dataframe_label = ttk.Label(self, text="DataFrame:")
+    self.dataframe_text = tk.Text(self, width=50)
+
+    self.website_label.grid(row=0, column=0)
+    self.website_entry.grid(row=0, column=1)
+    self.keywords_label.grid(row=1, column=0)
+    self.keywords_entry.grid(row=1, column=1)
+    self.track_button.grid(row=2, column=0)
+    self.dataframe_label.grid(row=3, column=0)
+    self.dataframe_text.grid(row=4, column=0, columnspan=2)
+
+  def track_ranks(self):
+    self.dataframe = seo.track_ranks(self.website.get(), self.keywords.get())
+    self.dataframe_text.delete(1.0, tk.END)
+    self.dataframe_text.insert(1.0, self.dataframe.to_string())
+
+if __name__ == "__main__":
+  app = GoogleRankTracker()
+  app.mainloop()
